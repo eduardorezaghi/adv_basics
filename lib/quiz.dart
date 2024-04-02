@@ -1,5 +1,7 @@
+import 'package:adv_basics/questions.dart';
 import 'package:adv_basics/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// The Quiz widget is the root widget of the app.
 class Quiz extends StatefulWidget {
@@ -10,6 +12,20 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  Widget? activeScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    activeScreen = SplashScreen(switchScreen);
+  }
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = const QuestionScreen();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +48,7 @@ class _QuizState extends State<Quiz> {
               ],
             ),
           ),
-          child: const SplashScreen()
+          child: activeScreen,
           )
       ),
     );

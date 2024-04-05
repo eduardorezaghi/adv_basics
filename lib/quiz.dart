@@ -1,4 +1,4 @@
-import 'package:adv_basics/questions.dart';
+import 'package:adv_basics/questions_screen.dart';
 import 'package:adv_basics/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,17 +12,11 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  Widget? activeScreen;
-
-  @override
-  void initState() {
-    super.initState();
-    activeScreen = SplashScreen(switchScreen);
-  }
+  var activeScreen = 'start-screen';
 
   void switchScreen() {
     setState(() {
-      activeScreen = const QuestionScreen();
+      activeScreen = activeScreen == 'start-screen' ? 'quiz-screen' : 'start-screen';
     });
   }
 
@@ -48,7 +42,9 @@ class _QuizState extends State<Quiz> {
               ],
             ),
           ),
-          child: activeScreen,
+          child: activeScreen == 'start-screen'
+              ? SplashScreen(switchScreen)
+              : const QuestionScreen(),
           )
       ),
     );

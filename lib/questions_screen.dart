@@ -60,6 +60,17 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 answerText: answer,
               );
             }),
+
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Submit'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go back')
+            ),
           ],
         ),
       ),

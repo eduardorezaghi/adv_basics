@@ -26,7 +26,7 @@ class _QuizState extends State<Quiz> {
       title: 'Quiz App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.deepPurple
+          primarySwatch: Colors.deepPurple,
         ),
         useMaterial3: true,
       ),
@@ -42,11 +42,13 @@ class _QuizState extends State<Quiz> {
               ],
             ),
           ),
-          child: activeScreen == 'start-screen'
-              ? SplashScreen(switchScreen)
-              : const QuestionScreen(),
-          )
+          child: const Center(child: SplashScreen()),
+        ),
       ),
+      routes: {
+        '/start-screen': (BuildContext context) => const SplashScreen(),
+        '/quiz-screen': (BuildContext context) => const QuestionScreen(),
+      },
     );
   }
 }

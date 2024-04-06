@@ -1,21 +1,17 @@
+
 import 'package:adv_basics/questions_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  final void Function() startQuiz;
-
-  const SplashScreen( this.startQuiz, {super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => 
-  // ignore: no_logic_in_create_state
-  _SplashScreenState(startQuiz);
+  _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final void Function() startQuiz;
-
-  _SplashScreenState(this.startQuiz);
+  _SplashScreenState();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
           OutlinedButton.icon(
             onPressed: () {
               // Navigate to the quiz screen
-              startQuiz();
+              Navigator.pushNamed(context, '/quiz-screen');
             },
             style: OutlinedButton.styleFrom(
               textStyle: const TextStyle(

@@ -1,7 +1,8 @@
+import 'package:adv_basics/data/questions.dart';
 import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/result_screen.dart';
 import 'package:adv_basics/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// The Quiz widget is the root widget of the app.
 class Quiz extends StatefulWidget {
@@ -12,11 +13,15 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  var activeScreen = 'start-screen';
+  List<String> selectedAnswers = [];
 
-  void switchScreen() {
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+
     setState(() {
-      activeScreen = activeScreen == 'start-screen' ? 'quiz-screen' : 'start-screen';
+      if (selectedAnswers.length == questions.length) {
+        selectedAnswers = [];
+      }
     });
   }
 
@@ -47,7 +52,8 @@ class _QuizState extends State<Quiz> {
       ),
       routes: {
         '/start-screen': (BuildContext context) => const SplashScreen(),
-        '/quiz-screen': (BuildContext context) => const QuestionScreen(),
+        '/quiz-screen': (BuildContext context) =>   QuestionScreen(onSelectAnswer: chooseAnswer),
+        '/result-screen': (BuildContext context) => ResultScreen(chosenAnswers: selectedAnswers),
       },
     );
   }

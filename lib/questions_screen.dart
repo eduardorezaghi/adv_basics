@@ -1,5 +1,6 @@
 import 'package:adv_basics/answer_button.dart';
 import 'package:adv_basics/models/questions_blueprint.dart';
+import 'package:adv_basics/styled_scaffold.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adv_basics/data/questions.dart';
@@ -58,50 +59,54 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     final currentQuestion = finalQuestions[questionIndex];
 
-    return SizedBox(
+    return StyledScaffold(
+      child: SizedBox(
       width: double.infinity,
       child: Container(
         margin: const EdgeInsets.all(40),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              currentQuestion.question,
-              style: GoogleFonts.lato(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-
-
-            ...(questionIndex >= finalQuestions.length - 1
-              ? currentQuestion.answers
-              : currentQuestion.getShuffledAnswers()).map((answer) {
-              return AnswerButton(
-              answerText: answer,
-              selectHandler: () => answerQuestion(answer),
-              );
-            }),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/result-screen', arguments: questionIndex);
-              },
-              child: const Text('Submit'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                previousQuestion();
-              },
-              child: const Text('Previous'),
-            ),
-          ],
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+          currentQuestion.question,
+          style: GoogleFonts.lato(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 30),
+    
+    
+          ...(questionIndex >= finalQuestions.length - 1
+          ? currentQuestion.answers
+          : currentQuestion.getShuffledAnswers()).map((answer) {
+          return AnswerButton(
+          answerText: answer,
+          selectHandler: () => answerQuestion(answer),
+          );
+          }),
+    
+          ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/result-screen', arguments: questionIndex);
+          },
+          child: const Text('Submit'),
+          ),
+          ElevatedButton(
+          onPressed: () {
+            previousQuestion();
+          },
+          child: const Text('Previous'),
+          ),
+        ],
         ),
+      ),
       ),
     );
   }
 }
+
+

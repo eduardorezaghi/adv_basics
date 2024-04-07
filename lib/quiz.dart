@@ -32,23 +32,11 @@ class _QuizState extends State<Quiz> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.deepPurple,
+          accentColor: Colors.purpleAccent,
         ),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-            ),
-          ),
-          child: const Center(child: SplashScreen()),
-        ),
+      home: const Center(child: SplashScreen()
       ),
       routes: {
         '/start-screen': (BuildContext context) => const SplashScreen(),

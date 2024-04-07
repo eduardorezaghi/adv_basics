@@ -6,7 +6,12 @@ import 'package:adv_basics/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  final Function onSelectAnswer;
+
+  const QuestionScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
@@ -22,11 +27,30 @@ class _QuestionScreenState extends State<QuestionScreen> {
     super.initState();
   }
 
-  void answerQuestion() {
+  void answerQuestion(
+    String selectedAnswer,
+  ) {
     setState(() {
-      questionIndex < finalQuestions.length - 1
-          ? questionIndex++
-          : questionIndex = 0;
+      widget.onSelectAnswer(selectedAnswer);
+      if (questionIndex >= finalQuestions.length - 1) {
+        // Stay on the last question
+        questionIndex = finalQuestions.length - 1;
+        return;
+      } else {
+        questionIndex = questionIndex + 1;
+      }
+    });
+  }
+
+  void previousQuestion() {
+    setState(() {
+      if (questionIndex <= 0) {
+        // Stay on the first question
+        questionIndex = 0;
+        return;
+      } else {
+        questionIndex = questionIndex - 1;
+      }
     });
   }
 
@@ -54,22 +78,26 @@ class _QuestionScreenState extends State<QuestionScreen> {
             const SizedBox(height: 30),
 
 
-            ...currentQuestion.getShuffledAnswers().map((answer) {
+            ...(questionIndex >= finalQuestions.length - 1
+              ? currentQuestion.answers
+              : currentQuestion.getShuffledAnswers()).map((answer) {
               return AnswerButton(
-                selectHandler: answerQuestion,
-                answerText: answer,
+              answerText: answer,
+              selectHandler: () => answerQuestion(answer),
               );
             }),
 
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/result-screen', arguments: questionIndex);
+              },
               child: const Text('Submit'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                previousQuestion();
               },
-              child: const Text('Go back')
+              child: const Text('Previous'),
             ),
           ],
         ),

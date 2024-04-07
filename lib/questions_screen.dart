@@ -28,11 +28,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
     super.initState();
   }
 
-  void answerQuestion(
-    String selectedAnswer,
-  ) {
+  void answerQuestion(String selectedAnswer) {
     setState(() {
       widget.onSelectAnswer(selectedAnswer);
+
       if (questionIndex >= finalQuestions.length - 1) {
         // Stay on the last question
         questionIndex = finalQuestions.length - 1;
@@ -46,8 +45,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
   void previousQuestion() {
     setState(() {
       if (questionIndex <= 0) {
-        // Stay on the first question
-        questionIndex = 0;
+        // Go back to the starting screen and reset the answers
+        Navigator.pushNamed(context, '/start-screen');
         return;
       } else {
         questionIndex = questionIndex - 1;
@@ -55,58 +54,81 @@ class _QuestionScreenState extends State<QuestionScreen> {
     });
   }
 
+  Widget buildAnswerButtons() {
+    // If is the last question, disable the buttons
+    if (questionIndex == finalQuestions.length - 1) {
+      return Column(
+        children: finalQuestions[questionIndex].answers.map((answer) {
+          return AnswerButton(
+            selectHandler: () => {
+              answerQuestion(answer)
+            },
+            answerText: answer,
+          );
+        }).toList(),
+      );
+    } else {
+      return Column(
+        children: finalQuestions[questionIndex].answers.map((answer) {
+          return AnswerButton(
+            selectHandler: () => answerQuestion(answer),
+            answerText: answer,
+          );
+        }).toList(),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentQuestion = finalQuestions[questionIndex];
-
     return StyledScaffold(
       child: SizedBox(
-      width: double.infinity,
-      child: Container(
-        margin: const EdgeInsets.all(40),
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Text(
-          currentQuestion.question,
-          style: GoogleFonts.lato(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+        width: double.infinity,
+        child: Container(
+          margin: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                'Question ${questionIndex + 1} of ${finalQuestions.length}',
+                style: GoogleFonts.lato(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 20,
+                  // italic
+                  textStyle: const TextStyle(fontStyle: FontStyle.italic),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                finalQuestions[questionIndex].question,
+                style: GoogleFonts.lato(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              buildAnswerButtons(),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/result-screen');
+                },
+                child: const Text('Submit'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  previousQuestion();
+                },
+                child: const Text('Previous'),
+              ),
+            ],
           ),
-          textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-    
-    
-          ...(questionIndex >= finalQuestions.length - 1
-          ? currentQuestion.answers
-          : currentQuestion.getShuffledAnswers()).map((answer) {
-          return AnswerButton(
-          answerText: answer,
-          selectHandler: () => answerQuestion(answer),
-          );
-          }),
-    
-          ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/result-screen', arguments: questionIndex);
-          },
-          child: const Text('Submit'),
-          ),
-          ElevatedButton(
-          onPressed: () {
-            previousQuestion();
-          },
-          child: const Text('Previous'),
-          ),
-        ],
         ),
-      ),
       ),
     );
   }
 }
-
 

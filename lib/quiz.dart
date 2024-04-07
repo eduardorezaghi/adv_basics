@@ -16,12 +16,17 @@ class _QuizState extends State<Quiz> {
   List<String> selectedAnswers = [];
 
   void chooseAnswer(String answer) {
-    selectedAnswers.add(answer);
 
     setState(() {
-      if (selectedAnswers.length == questions.length) {
-        selectedAnswers = [];
+      if (selectedAnswers.length < questions.length) {
+        selectedAnswers.add(answer);
       }
+    });
+  }
+
+  void restartQuiz() {
+    setState(() {
+      selectedAnswers = [];
     });
   }
 
@@ -41,7 +46,7 @@ class _QuizState extends State<Quiz> {
       routes: {
         '/start-screen': (BuildContext context) => const SplashScreen(),
         '/quiz-screen': (BuildContext context) =>   QuestionScreen(onSelectAnswer: chooseAnswer),
-        '/result-screen': (BuildContext context) => ResultScreen(chosenAnswers: selectedAnswers),
+        '/result-screen': (BuildContext context) => ResultScreen(chosenAnswers: selectedAnswers, onRestartQuiz: restartQuiz),
       },
     );
   }
